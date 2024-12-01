@@ -6,6 +6,7 @@ Chain Whisperer is an innovative blockchain interaction platform that combines t
 
 Key Features:
 - Natural language interface powered by AI (OpenAI GPT and Google Gemini) for blockchain interactions
+- Abstraction of currency holdings across blockchains and routing of transactions based on user preferences
 - Cross-chain token transfers and balance checking
 - Web3 wallet integration (MetaMask support)
 - Real-time balance updates across different networks
@@ -14,6 +15,8 @@ Key Features:
 The platform aims to make blockchain technology more accessible by allowing users to execute complex blockchain operations using simple, conversational commands. Whether you're checking balances, transferring tokens, or interacting with smart contracts, Chain Whisperer translates your natural language inputs into blockchain transactions.
 
 Built with:
+- Router
+- Avalanche
 - React.js
 - Ethers.js
 - OpenAI GPT & Google Gemini APIs

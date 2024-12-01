@@ -711,13 +711,14 @@ function App() {
   ];
   const [consoleData, setConsoleData] = useState([]);
 
-  const PATH_FINDER_API_URL = "https://k8-testnet-pf.routerchain.dev";
+  const PATH_FINDER_API_URL = "https://k8-testnet-pf.routerchain.dev/api";
 
   const getQuote = async (params) => {
-    const endpoint = "v2/quote";
+    const endpoint = "v2/sequencer-quote";
     const quoteUrl = `${PATH_FINDER_API_URL}/${endpoint}`;
 
-    console.log(quoteUrl);
+    console.log("quoteUrl: ", quoteUrl);
+    console.log("params: ", params);
 
     try {
       const res = await axios.get(quoteUrl, { params });
@@ -1060,10 +1061,12 @@ function App() {
           const params = {
             fromTokenAddress: from,
             toTokenAddress: to,
-            amount: k,
+            // Convert amount to string
+            amount: k.toString(),
             fromTokenChainId: fromChainID,
-            toTokenChainId: toChainID,
-            widgetId: 0,
+            //  Remove trailing \n from toTokenChainId
+            toTokenChainId: toChainID.replace(/\n$/, ""),
+            // widgetId: 0,
           };
           console.log(params);
 
