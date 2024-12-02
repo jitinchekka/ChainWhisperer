@@ -45,16 +45,17 @@ function App() {
   }, []);
 
   const [from, setFromAddress] = useState(
-    "0x22bAA8b6cdd31a0C5D1035d6e72043f4Ce6aF054"
+    "0xb75f7E3256A5FDa11A3e95Dd25e8129189F78dA3"
   );
   const [to, setToAddress] = useState(
-    "0xb452b513552aa0B57c4b1C9372eFEa78024e5936"
+    "0xB88C2D2fDFcf10B6E3d2D747B7056EC080c1fefe"
   );
   const [amount, setAmount] = useState(0);
   const [quoteData, setQuoteData] = useState("");
   const [polygonBalance, setPolygonBalance] = useState(0);
   const [avalancheBalance, setAvalancheBalance] = useState(0);
   const [account, setAccount] = useState("Connect Wallet");
+  const [isFastMode, setIsFastMode] = useState(false);
   const erc20_abi = [
     {
       inputs: [
@@ -714,7 +715,7 @@ function App() {
   const PATH_FINDER_API_URL = "https://k8-testnet-pf.routerchain.dev/api";
 
   const getQuote = async (params) => {
-    const endpoint = "v2/sequencer-quote";
+    const endpoint = "v2/quote";
     const quoteUrl = `${PATH_FINDER_API_URL}/${endpoint}`;
 
     console.log("quoteUrl: ", quoteUrl);
@@ -844,9 +845,9 @@ function App() {
         the below data is in this format,
           usdt: {
             Ethereum: {
-                address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
-                chainID: "5", 
-                TokenSymbol: "GTH"
+                address: "0xb75f7E3256A5FDa11A3e95Dd25e8129189F78dA3",
+                chainID: "421614", 
+                TokenSymbol: "AFTT"
             },
             polygon: {
                 address: "0x22bAA8b6cdd31a0C5D1035d6e72043f4Ce6aF054",
@@ -854,9 +855,9 @@ function App() {
                 TokenSymbol: "MATIC"
             },
             avalanche: {
-                address: "0xb452b513552aa0B57c4b1C9372eFEa78024e5936",
+                address: "0xB88C2D2fDFcf10B6E3d2D747B7056EC080c1fefe",
                 chainID: "43113", 
-                TokenSymbol: "AVAX"
+                TokenSymbol: "AFTT"
             },
             bnb: {
                 address: "0x7ef95a0FEE0Dd31b22626fA2e10Ee6A223F8a684", 
@@ -867,7 +868,7 @@ function App() {
                 address: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU", 
                 chainID: "102", 
                 TokenSymbol: "SOL"
-            }
+            },
           }
 
           Output format should be in this format and to be followed strictly,
@@ -1189,9 +1190,21 @@ function App() {
     <div>
       <div className="container">
         <nav className="navbar">
-          <h2>Talk2Vault</h2>
-          <div style={{ display: "flex", gap: "10px" }}>
-
+          <h2>ChainWhisperer</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span className="mode-label">
+                {isFastMode ? "Fast Mode" : "Gas-Saving Mode"}
+              </span>
+              <label className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={isFastMode}
+                  onChange={() => setIsFastMode(!isFastMode)}
+                />
+                <span className="toggle-slider"></span>
+              </label>
+            </div>
             <button
               class="my-btn"
               onClick={async () => {
