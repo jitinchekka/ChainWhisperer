@@ -25,6 +25,44 @@ Commands you can issue :
 - RECSTATUS
 - LOGS
 
+## Installation Instructions:
+1. Clone the repository:
+```bash
+git clone https://github.com/jitinchekka/ChainWhisperer.git
+```
+2. Install dependencies:
+```bash
+cd ChainWhisperer
+yarn install
+```
+3. Start the development server:
+```bash
+yarn dev
+```
+4. Open the application in your browser:
+```
+http://localhost:3000
+```
+
+## Usage Instructions:
+1. Connect your MetaMask wallet to the application.
+2. Enter your command in the text box and press Enter.
+``` text
+Bridge 1 AFTT from Ethereum to Avalanche
+```
+3. You will get the transaction hash as a response.
+``` text
+Transaction Hash: 0x1234567890abcdef
+```
+4. View the transaction status using the `EXECSTATUS` command.
+``` text
+ExecStatus 0x1234567890abcdef
+```
+5. Check the logs of the transaction using the `LOGS` command.
+``` text
+Logs
+```
+
 ## Technologies Used:
 
 ### Frontend:
