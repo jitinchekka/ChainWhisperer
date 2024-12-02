@@ -12,6 +12,10 @@ Chain Whisperer is an innovative blockchain interaction platform that combines t
 - Real-time balance updates across different networks
 - User-friendly interface for both blockchain beginners and experts
 
+## Flow of the Application:
+<!-- Image -->
+![Flow](https://raw.githubusercontent.com/jitinchekka/ChainWhisperer/refs/heads/main/static/flow.jpeg)
+
 The platform aims to make blockchain technology more accessible by allowing users to execute complex blockchain operations using simple, conversational commands. Whether you're checking balances, transferring tokens, or interacting with smart contracts, Chain Whisperer translates your natural language inputs into blockchain transactions.
 
 Commands you can issue :
