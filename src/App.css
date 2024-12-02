@@ -87,31 +87,34 @@
 }
 
 .message {
-  margin-bottom: 15px;
-  padding: 15px;
-  border-radius: 12px;
-  max-width: 70%;
-  position: relative;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 10px;
+  max-width: 80%;
 }
 
 .message.user {
-  background-color: #3b82f6;
+  background-color: #007bff;
   color: white;
-  align-self: flex-end;
+  margin-left: auto;
 }
 
-.message.bot {
-  background-color: #374151;
-  color: #fff;
-  align-self: flex-start;
+.message.assistant {
+  background-color: #f0f0f0;
+  color: #333;
+  margin-right: auto;
 }
 
-.timestamp {
-  font-size: 12px;
-  color: #9ca3af;
-  position: absolute;
-  bottom: -20px;
-  right: 10px;
+.message-content {
+  word-wrap: break-word;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
 }
 
 .inputGPT {

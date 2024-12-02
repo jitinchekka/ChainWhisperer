@@ -804,33 +804,38 @@ function App() {
 
   function askGPT(objective) {
     let prompt = `
-        Commands you can issue:
-        1. BRIDGE 'amount' 'fromChain' 'toChain' 'condition'
-          You need to issue this command to exchange of values between two different tokens takes place within the same Blockchain called Swapping.
+      Commands you can issue:
+      1. BRIDGE 'amount' 'fromChain' 'toChain' 'condition'
+        You need to issue this command to exchange of values between two different tokens takes place within the same Blockchain called Swapping.
+        where,
+          amount - value to be exchanged,
+          fromChain - Abbreviation or Name of the blockchain networks you want to Bridge,
+          toChain - Abbreviation or Name of the blockchain networks you want to get Bridged,
+          condition - If any additional condition mentioned by user else keep it NONE.
+
+      2. EXECSTATUS 'txhash'
+          You need to issue this command to Check Contract Execution Status which Returns the status code of a contract execution.
           where,
-            amount - value to be exchanged,
-            fromChain - Abbreviation or Name of the blockchain networks you want to Bridge,
-            toChain - Abbreviation or Name of the blockchain networks you want to get Bridged,
-            condition - If any additional condition mentioned by user else keep it NONE.
+            txhash - the string representing the transaction hash to check the execution status
 
-        2. EXECSTATUS 'txhash'
-            You need to issue this command to Check Contract Execution Status which Returns the status code of a contract execution.
-            where,
-              txhash - the string representing the transaction hash to check the execution status
+      3. RECSTATUS 'txhash'
+          You need to issue this command to Check Transaction Receipt Status which Returns the status code of a transaction execution.
+          where,
+            txhash - the string representing the transaction hash to check the execution status
+      
+      4. LOGS
+          You need to issue this command to Get Event Logs.
 
-        3. RECSTATUS 'txhash'
-            You need to issue this command to Check Transaction Receipt Status which Returns the status code of a transaction execution.
-            where,
-              txhash - the string representing the transaction hash to check the execution status
-        
-        4. LOGS
-            You need to issue this command to Get Event Logs.
-
-        You can only issue these commands as outputs where all parameters must be always within the single quotes. And no need to explain anything, where the format of the commands should be followed strictly.
-        Example - 1:
-        Input: Bridge 10 UDST from etherium to Solona
-        Output: BRIDGE '10' 'etherium' 'Solona'
-        `;
+      If the user's input is missing any required parameters for BRIDGE (amount, fromChain, or toChain), respond with "ASK_USER: What is the {missing_parameter}?"
+      
+      You can only issue these commands as outputs where all parameters must be always within the single quotes. And no need to explain anything, where the format of the commands should be followed strictly.
+      Example - 1:
+      Input: Bridge 10 UDST from etherium to Solona
+      Output: BRIDGE '10' 'etherium' 'Solona' 'NONE'
+      Example - 2:
+      Input: Bridge from ethereum to solana
+      Output: ASK_USER: What amount would you like to bridge?
+      `;
 
     const requestOptions = {
       method: "POST",
@@ -845,7 +850,7 @@ function App() {
         },
         contents: {
           parts: {
-            text: `Input: ${objective}\nOutput:` // "BRIDGE '10' 'etherium' 'Solona'"
+            text: `Input: ${objective}\nOutput:`
           }
         }
       }),
@@ -1188,12 +1193,42 @@ function App() {
     }
   }
   const [obj, setObj] = useState("");
+  const [chatMessages, setChatMessages] = useState([{
+    role: 'assistant',
+    content: 'Hello! How can I help you with blockchain operations today?'
+  }]);
+
   const performGPTAction = async (Objective) => {
     console.log("Objective: ", Objective);
     setObj(Objective);
+
+    // Add user message to chat
+    setChatMessages(prev => [...prev, {
+      role: 'user',
+      content: Objective
+    }]);
+
     let actionCommand = await askGPT(Objective);
     console.log("GPT's response: ", actionCommand);
+
+    // Check if we need to ask for more information
+    if (actionCommand.startsWith("ASK_USER:")) {
+      // Add the follow-up question to the chat UI
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: actionCommand.replace("ASK_USER:", "").trim()
+      }]);
+      return;
+    }
+
+    // If we have all the information, perform the action
     performAction(actionCommand);
+
+    // Add the action confirmation to the chat
+    setChatMessages(prev => [...prev, {
+      role: 'assistant',
+      content: `Processing your request: ${actionCommand}`
+    }]);
   };
 
   const currentTimestamp = new Date();
@@ -1254,9 +1289,9 @@ function App() {
             <h5>Chat history</h5>
             <div className="cards">
               {consoleData.map((element, index) => (
-                <div className="card">
+                <div className="card" key={index}>
                   <p>User: {obj}</p>
-                  <p>Respose: {element}</p>
+                  <p>Response: {element}</p>
                 </div>
               ))}
             </div>
@@ -1269,11 +1304,13 @@ function App() {
                 </div>
                 <div className="chat">
                   <div className="messages">
-                    {consoleData && (
-                      <div className="console" style={{ overflow: "hidden" }}>
-                        <div>{consoleData[0]}</div>
+                    {chatMessages.map((message, index) => (
+                      <div key={index} className={`message ${message.role}`}>
+                        <div className="message-content">
+                          {message.content}
+                        </div>
                       </div>
-                    )}
+                    ))}
                   </div>
                 </div>
               </div>
