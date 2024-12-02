@@ -218,3 +218,29 @@ input:checked + .toggle-slider:before {
   font-size: 14px;
   margin-right: 8px;
 }
+
+.wallet-btn {
+  background: linear-gradient(to right, #2c3e50, #3498db);
+  border: none;
+  border-radius: 12px;
+  padding: 8px 16px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wallet-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.wallet-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wallet-icon {
+  font-size: 1.2em;
+}

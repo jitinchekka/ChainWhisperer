@@ -4,6 +4,11 @@ import { ethers } from "ethers";
 import GPTInput from "./components/GPTInput";
 import "./App.css";
 
+const shortenAddress = (address) => {
+  if (!address) return "Connect Wallet";
+  return `${address.substring(0, 6)}...${address.substring(38)}`;
+};
+
 function App() {
   useEffect(async () => {
     if (window.ethereum) {
@@ -45,7 +50,7 @@ function App() {
   }, []);
 
   const [from, setFromAddress] = useState(
-    "0xb75f7E3256A5FDa11A3e95Dd25e8129189F78dA3"
+    "0x5C2C6ab36A6e4e160fb9C529e164B7781f7d255f"
   );
   const [to, setToAddress] = useState(
     "0xB88C2D2fDFcf10B6E3d2D747B7056EC080c1fefe"
@@ -56,6 +61,10 @@ function App() {
   const [avalancheBalance, setAvalancheBalance] = useState(0);
   const [account, setAccount] = useState("Connect Wallet");
   const [isFastMode, setIsFastMode] = useState(false);
+  const [fromTokenChainId, setFromTokenChainId] = useState("17000");  // Default to Holesky
+  const [toTokenChainId, setToTokenChainId] = useState("421614");     // Default to Arbitrum
+  const [fromTokenAddress, setFromTokenAddress] = useState("0x5C2C6ab36A6e4e160fb9C529e164B7781f7d255f");
+  const [toTokenAddress, setToTokenAddress] = useState("0xB88C2D2fDFcf10B6E3d2D747B7056EC080c1fefe");
   const erc20_abi = [
     {
       inputs: [
@@ -718,11 +727,21 @@ function App() {
     const endpoint = "v2/quote";
     const quoteUrl = `${PATH_FINDER_API_URL}/${endpoint}`;
 
-    console.log("quoteUrl: ", quoteUrl);
-    console.log("params: ", params);
+    const queryParams = new URLSearchParams({
+      fromTokenAddress: params.fromTokenAddress,
+      toTokenAddress: params.toTokenAddress,
+      amount: params.amount.toString(),
+      // fromTokenChainId: params.fromTokenChainId, // Hardcode to Holesky
+      fromTokenChainId: "17000",
+      // toTokenChainId: params.toTokenChainId // Hardcode to Arbitrum
+      toTokenChainId: "421614"
+    });
+
+    const fullUrl = `${quoteUrl}?${queryParams}`;
+    console.log("Requesting quote from:", fullUrl);
 
     try {
-      const res = await axios.get(quoteUrl, { params });
+      const res = await axios.get(fullUrl);
       return res.data;
     } catch (e) {
       console.error(`Fetching quote data from pathfinder: ${e}`);
@@ -832,7 +851,7 @@ function App() {
       }),
     };
 
-    return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=AIzaSyA8m8n6kyP8U6X3BR5iTEBOAgn3xztMd0E", requestOptions)
+    return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA8m8n6kyP8U6X3BR5iTEBOAgn3xztMd0E", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         return data.candidates[0].content.parts[0].text;
@@ -899,7 +918,7 @@ function App() {
       })
     };
 
-    return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=AIzaSyA8m8n6kyP8U6X3BR5iTEBOAgn3xztMd0E", requestOptions)
+    return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyA8m8n6kyP8U6X3BR5iTEBOAgn3xztMd0E", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         console.log("data json object: ", data);
@@ -1206,67 +1225,24 @@ function App() {
               </label>
             </div>
             <button
-              class="my-btn"
+              className="wallet-btn"
               onClick={async () => {
                 if (window.ethereum) {
-                  console.log("detected");
-
                   try {
                     const accounts = await window.ethereum.request({
                       method: "eth_requestAccounts",
                     });
-
                     setAccount(accounts[0]);
-
-                    console.log(accounts[0]);
-                    const provider = new ethers.providers.Web3Provider(
-                      window.ethereum
-                    );
-                    const provider1 = new ethers.providers.JsonRpcProvider(
-                      "https://rpc.ankr.com/polygon_mumbai",
-                      80001
-                    );
-                    const provider2 = new ethers.providers.JsonRpcProvider(
-                      "https://rpc.ankr.com/avalanche_fuji",
-                      43113
-                    );
-                    const signer = provider.getSigner();
-
-                    const contract = new ethers.Contract(
-                      from,
-                      erc20_abi,
-                      provider1
-                    );
-
-                    let balance = await contract.balanceOf(accounts[0]);
-
-                    console.log(
-                      ethers.utils.formatEther(balance) * Math.pow(10, 6)
-                    );
-                    setPolygonBalance(
-                      ethers.utils.formatEther(balance) * Math.pow(10, 6)
-                    );
-
-                    const contract2 = new ethers.Contract(
-                      to,
-                      erc20_abi,
-                      provider2
-                    );
-                    balance = await contract2.balanceOf(accounts[0]);
-                    console.log(
-                      ethers.utils.formatEther(balance) * Math.pow(10, 12)
-                    );
-                    setAvalancheBalance(
-                      ethers.utils.formatEther(balance) * Math.pow(10, 12)
-                    );
                   } catch (err) {
                     console.log(err);
                   }
                 }
               }}
             >
-              {account}
-              {/* {account.substring(0, 4) + "...." + account.substring(38, 42)} */}
+              <div className="wallet-content">
+                <div className="wallet-icon">🦊</div>
+                <span>{shortenAddress(account)}</span>
+              </div>
             </button>
           </div>
         </nav>
@@ -1286,18 +1262,10 @@ function App() {
             <div className="chatSession">
               <div className="chats">
                 <div className="profile">
-                  <h4>FUNDS</h4>
+                  <h4>ChainWhisperer</h4>
                 </div>
                 <div className="chat">
                   <div className="messages">
-                    <div className="result">
-                      <p>
-                        Polygon: {polygonBalance} <span>MATIC</span>{" "}
-                      </p>
-                      <p>
-                        Avalanche: {avalancheBalance} <span>AVAX</span>{" "}
-                      </p>
-                    </div>
                     {consoleData && (
                       <div className="console" style={{ overflow: "hidden" }}>
                         <div>{consoleData[0]}</div>
