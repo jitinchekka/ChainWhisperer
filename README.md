@@ -2,9 +2,9 @@
 
 ## Description:
 
-Chain Whisperer is an innovative blockchain interaction platform that combines the power of AI with cross-chain functionality. This web3 application allows users to seamlessly interact with multiple blockchain networks (currently supporting Polygon Mumbai and Avalanche Fuji testnets) through natural language processing.
+Chain Whisperer is an innovative blockchain interaction platform that combines the power of AI with cross-chain functionality. This web3 application allows users to seamlessly interact with multiple blockchain networks (currently supporting Polygon Mumbai, Avalanche Fuji, Arbitrum, Holesky testnets) through natural language processing.
 
-Key Features:
+## Key Features:
 - Natural language interface powered by AI (OpenAI GPT and Google Gemini) for blockchain interactions
 - Abstraction of currency holdings across blockchains and routing of transactions based on user preferences
 - Cross-chain token transfers and balance checking
@@ -14,11 +14,62 @@ Key Features:
 
 The platform aims to make blockchain technology more accessible by allowing users to execute complex blockchain operations using simple, conversational commands. Whether you're checking balances, transferring tokens, or interacting with smart contracts, Chain Whisperer translates your natural language inputs into blockchain transactions.
 
-Built with:
-- Router
-- Avalanche
+Commands you can issue :
+- SWAP
+- BRIDGE
+- EXECSTATUS
+- RECSTATUS
+- LOGS
+
+## Technologies Used:
+
+### Frontend:
 - React.js
-- Ethers.js
-- OpenAI GPT & Google Gemini APIs
-- Web3 technologies
-- Multiple testnet integrations (Polygon Mumbai, Avalanche Fuji)
+- CSS3
+- HTML5
+- Axios for API requests
+
+### Blockchain & Web3:
+- Router Protocol for cross-chain transactions
+- Ethers.js for blockchain interactions
+- Web3.js
+- MetaMask integration
+- Multiple testnet integrations:
+  - Polygon Mumbai
+  - Avalanche Fuji
+  - Arbitrum
+  - Holesky
+
+### AI & APIs:
+- Google Gemini API for natural language processing
+- Etherscan API for transaction data
+- Router Protocol Pathfinder API
+
+### Development Tools:
+- Node.js
+- npm/yarn
+- Git for version control
+- Environment variable management (.env)
+
+### Smart Contract Development:
+- ERC20 token standards
+- Hardhat/Truffle for testing
+
+### Hosting & Deployment:
+- Vercel/Netlify for frontend hosting
+
+# Challenges Faced:
+- Integrating multiple blockchains and ensuring seamless communication between them
+- Using intents to parse user commands
+- Pathfinder API integration
+- Rate limiting on the Gemini API calls
+- Implementing optimal routing of transactions based on user preferences
+- Handling different token standards and ensuring compatibility across networks
+- Ensuring the security and reliability of cross-chain transactions
+- Balancing the trade-off between user-friendliness and developer complexity
+
+# Future Scope:
+- Using Smart Wallets instead of EOC wallets to avoid switching chains and signing transactions multiple times
+- Using Intent Parsing for more complex commands
+- Integrating more Blockchains
+- Deploying on Arbitrum and Avalanche Mainnet

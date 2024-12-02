@@ -244,3 +244,10 @@ input:checked + .toggle-slider:before {
 .wallet-icon {
   font-size: 1.2em;
 }
+
+.tagline {
+  font-size: 1.1em;
+  color: #9ca3af;
+  font-weight: 300;
+  margin-left: 20px;
+}

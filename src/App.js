@@ -1209,7 +1209,10 @@ function App() {
     <div>
       <div className="container">
         <nav className="navbar">
-          <h2>ChainWhisperer</h2>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <h2>ChainWhisperer</h2>
+            <span className="tagline">AI Chat Evolved: Where Intelligence Meets Web3</span>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span className="mode-label">
