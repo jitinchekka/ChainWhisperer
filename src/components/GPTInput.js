@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../App.css";
 
 function GPTInput({ onAskGPT }) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("Bridge 1 AFTT from Ethereum to Avalanche");
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
